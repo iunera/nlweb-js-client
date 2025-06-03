@@ -311,3 +311,32 @@ const chat = findChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-e
 ```
 
 For more information about the internal architecture and code organization, refer to the documentation in the `js/README.md` file.
+
+## Contributing
+
+Contributions to NLWeb JS Client are welcome! Here's how you can contribute:
+
+1. **Fork the repository**: Create your own fork of the project
+2. **Create a branch**: Make your changes in a new branch
+3. **Submit a pull request**: Open a PR from your branch to the main repository
+
+### Development Guidelines
+
+- Follow the existing code style and conventions
+- Write clear, commented code
+- Test your changes thoroughly
+- Update documentation as needed
+
+### Reporting Issues
+
+If you find a bug or have a feature request, please open an issue on the GitHub repository. Include as much detail as possible:
+
+- A clear description of the issue or feature
+- Steps to reproduce (for bugs)
+- Expected vs. actual behavior
+- Screenshots if applicable
+- Environment details (browser, OS, etc.)
+
+## License
+
+NLWeb JS Client is licensed under the [MIT License](LICENSE). See the LICENSE file for more details.

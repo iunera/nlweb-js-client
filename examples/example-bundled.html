@@ -1,7 +1,13 @@
-<html>
-<link rel="stylesheet" href="./styles.css">
-<link rel="stylesheet" href="./css/chat-interface.css">
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLWeb JS Client Example (Bundled)</title>
+    <!-- Include the bundled CSS -->
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="../dist/css/chat-interface.css">
+</head>
 <body>
 <div id="ai-search-container">
     <div class="search-box">
@@ -30,8 +36,10 @@
     window.chatApiEndpoint = "http://localhost:8000/ask";
 </script>
 
-<!-- Load the chat interface script directly -->
-<script type="module" src="./js/init/ChatInterfaceInit.js"></script>
+<!-- Load the bundled and minified library -->
+<!-- For production use, you can replace this with a CDN URL -->
+<script src="../dist/nlweb-js-client.min.js"></script>
+
 
 </body>
 </html>
