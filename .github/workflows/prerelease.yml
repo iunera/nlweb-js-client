@@ -1,0 +1,69 @@
+name: Prerelease Workflow
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+    paths:
+      - 'package.json'
+
+jobs:
+  prerelease:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get current version
+        id: get-version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Generate prerelease version
+        id: prerelease-version
+        run: |
+          BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | sed 's/[^a-zA-Z0-9]/-/g')
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          PRERELEASE_VERSION="${{ steps.get-version.outputs.version }}-${BRANCH_NAME}.${TIMESTAMP}"
+          echo "prerelease_version=${PRERELEASE_VERSION}" >> $GITHUB_OUTPUT
+          # Update package.json with prerelease version
+          npm version ${PRERELEASE_VERSION} --no-git-tag-version
+
+      - name: Publish prerelease to NPM
+        run: npm publish --tag next
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create Git tag
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a "v${{ steps.prerelease-version.outputs.prerelease_version }}" -m "Prerelease v${{ steps.prerelease-version.outputs.prerelease_version }}"
+          git push origin "v${{ steps.prerelease-version.outputs.prerelease_version }}"
+
+      - name: Create GitHub Prerelease
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.prerelease-version.outputs.prerelease_version }}
+          name: Prerelease v${{ steps.prerelease-version.outputs.prerelease_version }}
+          draft: true
+          prerelease: true
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Output prerelease version
+        run: echo "Published prerelease version ${{ steps.prerelease-version.outputs.prerelease_version }}"

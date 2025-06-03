@@ -1,6 +1,6 @@
 # Publishing to npm
 
-This repository is set up with GitHub Actions workflows to automate the process of publishing to npm and creating GitHub releases.
+This repository is set up with a GitHub Actions workflow to automate the process of publishing to npm and creating GitHub releases.
 
 ## Required GitHub Secrets
 
@@ -29,22 +29,41 @@ To create and add this secret:
    - Value: Paste the npm token you generated
    - Click "Add secret"
 
-## Workflows
+## Automated Release Workflows
 
-### 1. Version Bump and Tag
+The repository uses two separate workflows for release-related tasks:
 
-This workflow allows you to bump the version in package.json and create a git tag.
+### Release Workflow
 
-- **Trigger**: Manual (workflow_dispatch)
-- **Options**: patch, minor, major version bump
-- **File**: `.github/workflows/version-bump.yml`
+This workflow handles version checking, publishing to npm, and creating GitHub releases for the main branch.
 
-### 2. Publish Package to NPM and Create GitHub Release
+- **File**: `.github/workflows/release.yml`
+- **Trigger**: Automatically when package.json is modified on the main branch
 
-This workflow publishes the package to npm and creates a GitHub release.
+When the version in package.json is updated on the main branch:
 
-- **Trigger**: Automatically when a tag matching the pattern 'v*' is pushed
-- **File**: `.github/workflows/publish.yml`
+1. The workflow checks if the version already exists as a tag
+   - If the version already exists, the workflow stops
+   - If the version is new, the workflow continues
+2. The package is built
+3. A Git tag is created for the version
+4. The package is published to npm
+5. A GitHub release is created
+
+### Prerelease Workflow
+
+This workflow handles building and publishing prereleases for non-main branches.
+
+- **File**: `.github/workflows/prerelease.yml`
+- **Trigger**: Automatically when package.json is modified on any branch except main
+
+When package.json is modified on any branch other than main:
+
+1. The package is built
+2. A prerelease version is generated using the branch name and a timestamp
+3. The package is published to npm with the "next" tag
+4. A Git tag is created for the prerelease version
+5. A GitHub release is created and marked as a prerelease
 
 ## Manual Publishing
 

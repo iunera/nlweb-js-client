@@ -164,25 +164,44 @@ This library can be published to npm, making it available for installation via n
 
 #### Automated Publishing (Recommended)
 
-The repository includes GitHub Actions workflows to automate the versioning and publishing process:
+The repository includes GitHub Actions workflows to automate the publishing process:
 
-1. **Version Bump and Tagging**:
-   - Go to the GitHub repository's "Actions" tab
-   - Select the "Version Bump and Tag" workflow
-   - Click "Run workflow"
-   - Select the version type (patch, minor, major)
-   - Click "Run workflow" again
-   - This will automatically:
-     - Bump the version in package.json
-     - Create a git tag
-     - Push the changes
+**Release Workflow** (`.github/workflows/release.yml`):
 
-2. **Publishing to npm and Creating a GitHub Release**:
-   - The tag created in the previous step will automatically trigger the "Publish Package to NPM and Create GitHub Release" workflow
-   - This workflow will:
-     - Build the package
-     - Publish it to npm
-     - Create a GitHub release
+This workflow is triggered automatically when the version in package.json is changed on the main branch:
+
+- When you update the version in package.json on the main branch, the workflow will:
+  - Check if the version already exists (and stop if it does)
+  - Build the package
+  - Create a git tag for the version
+  - Publish the package to npm
+  - Create a GitHub release
+
+**Prerelease Workflow** (`.github/workflows/prerelease.yml`):
+
+This workflow is triggered automatically when package.json is modified on any branch except main:
+
+- When you modify package.json on any branch other than main, the workflow will:
+  - Build the package
+  - Generate a prerelease version using the branch name and timestamp
+  - Publish the prerelease to npm with the "next" tag
+  - Create a Git tag for the prerelease version
+  - Create a GitHub release marked as a prerelease
+
+To update the version in package.json, you can:
+```bash
+# For patch version (1.0.0 -> 1.0.1)
+npm version patch
+
+# For minor version (1.0.0 -> 1.1.0)
+npm version minor
+
+# For major version (1.0.0 -> 2.0.0)
+npm version major
+
+# Then push the changes to trigger the workflow
+git push
+```
 
 #### Manual Publishing
 
