@@ -10,7 +10,6 @@ separation of concerns.
     - `ManagedEventSource.js`: Handles EventSource connections with retry logic
 - `ui/`: UI-related components
     - `ChatInterfaceUI.js`: UI-related components and methods for the ChatInterface
-    - `ChatInterfaceStyle.js`: Provides backward compatibility with the old chart-interface-style.js
 - `utils/`: Utility functions
     - `JsonUtils.js`: Utility functions for JSON handling and rendering
 - `init/`: Initialization code
