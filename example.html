@@ -1,0 +1,37 @@
+<html>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="css/chat-interface.css">
+
+<body>
+<div id="ai-search-container">
+    <div class="search-box">
+        <input
+                type="text"
+                id="ai-search-input"
+                placeholder="Ask"
+        >
+        <button id="ai-search-button">
+            Ask
+        </button>
+    </div>
+    <div id="chat-container">
+        <div id="close-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </div>
+    </div>
+</div>
+
+<!-- Configuration for the chat interface -->
+<script>
+    // Configure the API endpoint here
+    window.chatApiEndpoint = "http://localhost:8000/ask";
+</script>
+
+<!-- Load the chat interface script directly -->
+<script type="module" src="js/init/ChatInterfaceInit.js"></script>
+
+</body>
+</html>
