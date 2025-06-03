@@ -1,6 +1,15 @@
 # NLWeb JS Client
 
-A streaming chat interface client library for embedding AI-powered chat functionality in web applications.
+A streaming chat interface client library for embedding AI-powered chat functionality in web applications. This library provides an easy way to add interactive, AI-powered chat capabilities to your website or web application.
+
+## Features
+
+- Real-time streaming responses
+- Customizable UI components
+- Support for multiple integration methods (bundled, ES modules)
+- Configurable API endpoints
+- Responsive design that works on desktop and mobile
+- Simple HTML structure for easy integration
 
 ## Installation
 
@@ -24,7 +33,34 @@ You can include the library directly from a CDN:
 
 Replace `https://cdn.example.com/nlweb-js-client/` with your actual CDN URL.
 
+### Direct Download
+
+You can also download the latest release from the [GitHub repository](https://github.com/iunera/nlweb-js-client/releases) and include the files directly in your project.
+
 ## Usage
+
+### HTML Structure
+
+The chat interface requires the following HTML structure:
+
+```html
+<div id="ai-search-container">
+  <div class="search-box">
+    <input type="text" id="ai-search-input" placeholder="Ask">
+    <button id="ai-search-button">Ask</button>
+  </div>
+  <div id="chat-container">
+    <div id="close-icon">
+      <!-- SVG for close icon -->
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </div>
+  </div>
+</div>
+```
 
 ### Using the Bundled Version
 
@@ -41,7 +77,14 @@ The simplest way to use the library is to include the bundled version:
   // The library is available as NLWebJsClient
   document.addEventListener('DOMContentLoaded', () => {
     const chat = NLWebJsClient();
-    // Use the chat interface...
+
+    // You can interact with the chat interface
+    chat.sendMessage('Hello, how can I help you today?');
+
+    // Listen for events
+    chat.on('message', (message) => {
+      console.log('New message:', message);
+    });
   });
 </script>
 ```
@@ -50,32 +93,34 @@ See `example-bundled.html` for a complete example.
 
 ### Using as an ES Module
 
+For more control and better integration with modern JavaScript applications, you can use the library as an ES module:
+
 ```javascript
 import { ChatInterface, findChatInterface } from 'nlweb-js-client';
 
-// Create a new chat interface
-const chat = findChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-endpoint/ask');
+// Option 1: Use the helper function to find or create a chat interface
+const chat = findChatInterface(
+  '', // site (optional)
+  'nlwebsearch', // display mode
+  'generate', // generate mode
+  'http://your-api-endpoint/ask' // API endpoint
+);
 
-// Or create it directly
-const chatInterface = new ChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-endpoint/ask');
-```
+// Option 2: Create the chat interface directly
+const chatInterface = new ChatInterface(
+  '', // site (optional)
+  'nlwebsearch', // display mode
+  'generate', // generate mode
+  'http://your-api-endpoint/ask' // API endpoint
+);
 
-### HTML Structure
+// Send a message programmatically
+chatInterface.sendMessage('Hello, how can I help you today?');
 
-The chat interface requires the following HTML structure:
-
-```html
-<div id="ai-search-container">
-  <div class="search-box">
-    <input type="text" id="ai-search-input" placeholder="Ask">
-    <button id="ai-search-button">Ask</button>
-  </div>
-  <div id="chat-container">
-    <div id="close-icon">
-      <!-- SVG for close icon -->
-    </div>
-  </div>
-</div>
+// Listen for events
+chatInterface.on('message', (message) => {
+  console.log('New message:', message);
+});
 ```
 
 ## Building the Library
@@ -115,7 +160,9 @@ Common CDN options include:
 - jsDelivr
 - unpkg (automatically available if you publish to npm)
 
-## Configuring the API Endpoint
+## Configuration
+
+### API Endpoint
 
 The API endpoint can be configured in two ways:
 
@@ -131,10 +178,136 @@ The API endpoint can be configured in two ways:
    const chat = findChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-endpoint/ask');
    ```
 
+### Display Modes
+
+The chat interface supports different display modes:
+
+- `nlwebsearch`: Standard chat interface with search functionality
+- `chat`: Simple chat interface without search functionality
+- `embed`: Embedded chat interface for integration into existing UI
+
+Example:
+```javascript
+const chat = findChatInterface('', 'chat', 'generate', 'http://your-api-endpoint/ask');
+```
+
+### Generate Modes
+
+The generate mode determines how responses are generated:
+
+- `generate`: Standard response generation
+- `stream`: Streaming response generation (responses appear word by word)
+
+Example:
+```javascript
+const chat = findChatInterface('', 'nlwebsearch', 'stream', 'http://your-api-endpoint/ask');
+```
+
+## API Documentation
+
+### Methods
+
+The chat interface provides the following methods:
+
+| Method | Description | Parameters |
+|--------|-------------|------------|
+| `sendMessage(message)` | Sends a message to the chat interface | `message` (string): The message to send |
+| `clearChat()` | Clears all messages from the chat interface | None |
+| `on(event, callback)` | Registers an event listener | `event` (string): Event name, `callback` (function): Event handler |
+| `off(event, callback)` | Removes an event listener | `event` (string): Event name, `callback` (function): Event handler |
+| `show()` | Shows the chat interface | None |
+| `hide()` | Hides the chat interface | None |
+
+### Events
+
+The chat interface emits the following events:
+
+| Event | Description | Callback Parameters |
+|-------|-------------|---------------------|
+| `message` | Fired when a new message is received | `message` (object): The message object |
+| `send` | Fired when a message is sent | `message` (string): The message text |
+| `open` | Fired when the chat interface is opened | None |
+| `close` | Fired when the chat interface is closed | None |
+| `error` | Fired when an error occurs | `error` (object): The error object |
+
+Example:
+```javascript
+const chat = findChatInterface();
+
+chat.on('message', (message) => {
+  console.log('New message received:', message);
+});
+
+chat.on('error', (error) => {
+  console.error('An error occurred:', error);
+});
+```
+
 ## Legacy Usage (Direct Embedding)
 
-For legacy usage or development purposes, you can still embed the chat interface script directly in your HTML file. See `example.html` for a complete example.
+For legacy usage or development purposes, you can still embed the chat interface script directly in your HTML file:
+
+```html
+<link rel="stylesheet" href="css/chat-interface.css">
+<script type="module" src="js/init/ChatInterfaceInit.js"></script>
+```
+
+See `example.html` for a complete example.
+
+## Browser Compatibility
+
+NLWeb JS Client is compatible with all modern browsers:
+
+- Chrome (latest 2 versions)
+- Firefox (latest 2 versions)
+- Safari (latest 2 versions)
+- Edge (latest 2 versions)
+
+For older browsers, you may need to include polyfills for features like Promises, Fetch API, and EventSource.
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Chat interface not appearing**
+   - Ensure the HTML structure is correct
+   - Check browser console for JavaScript errors
+   - Verify that the CSS file is properly loaded
+
+2. **Messages not sending**
+   - Check that the API endpoint is correctly configured
+   - Verify network connectivity to the API endpoint
+   - Look for CORS errors in the browser console
+
+3. **Styling issues**
+   - Make sure the CSS file is properly loaded
+   - Check for CSS conflicts with your existing styles
+   - Try using the bundled version which includes all necessary styles
+
+### Debugging
+
+To enable debug mode, set the `debug` option to `true`:
+
+```javascript
+const chat = findChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-endpoint/ask', { debug: true });
+```
+
+This will output detailed logs to the browser console.
 
 ## Advanced Configuration
 
-For more advanced configuration options, refer to the documentation in the `js/README.md` file.
+The chat interface can be further customized with additional options:
+
+```javascript
+const options = {
+  debug: true, // Enable debug logging
+  autoOpen: false, // Don't open the chat interface automatically
+  placeholder: 'Type your question...', // Custom placeholder for the input field
+  theme: 'dark', // Use dark theme (default is 'light')
+  maxMessages: 50, // Maximum number of messages to keep in history
+};
+
+const chat = findChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-endpoint/ask', options);
+```
+
+For more advanced configuration options and internal architecture details, refer to the documentation in the `js/README.md` file.
