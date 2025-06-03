@@ -89,7 +89,7 @@ The simplest way to use the library is to include the bundled version:
 </script>
 ```
 
-See `example-bundled.html` for a complete example.
+See [example-bundled.html](example-bundled.html) for a complete example.
 
 ### Using as an ES Module
 
