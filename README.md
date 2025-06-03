@@ -150,15 +150,75 @@ The build process will create the following files in the `dist` directory:
 - `nlweb-js-client.esm.js` - ES module build
 - CSS files in the `dist/css` directory
 
+## Publishing to npm
+
+This library can be published to npm, making it available for installation via npm/yarn and automatically accessible via the unpkg CDN.
+
+### Prerequisites for Publishing
+
+1. You need an npm account. If you don't have one, create it at [npmjs.com](https://www.npmjs.com/signup)
+2. You need to be logged in to npm in your terminal: `npm login`
+3. You need to have appropriate access rights to the npm package
+
+### Publishing Process
+
+#### Automated Publishing (Recommended)
+
+The repository includes GitHub Actions workflows to automate the versioning and publishing process:
+
+1. **Version Bump and Tagging**:
+   - Go to the GitHub repository's "Actions" tab
+   - Select the "Version Bump and Tag" workflow
+   - Click "Run workflow"
+   - Select the version type (patch, minor, major)
+   - Click "Run workflow" again
+   - This will automatically:
+     - Bump the version in package.json
+     - Create a git tag
+     - Push the changes
+
+2. **Publishing to npm and Creating a GitHub Release**:
+   - The tag created in the previous step will automatically trigger the "Publish Package to NPM and Create GitHub Release" workflow
+   - This workflow will:
+     - Build the package
+     - Publish it to npm
+     - Create a GitHub release
+
+#### Manual Publishing
+
+If you prefer to publish manually:
+
+```bash
+# Make sure you're logged in to npm
+npm login
+
+# Build the package
+npm run build
+
+# Publish to npm
+npm publish
+```
+
 ## Uploading to a CDN
 
-After building the library, you can upload the contents of the `dist` directory to a CDN of your choice. Make sure to include both the JavaScript files and the CSS files.
+After publishing to npm, the package is automatically available via unpkg:
 
-Common CDN options include:
+```html
+<!-- Latest version -->
+<link rel="stylesheet" href="https://unpkg.com/nlweb-js-client/dist/css/chat-interface.css">
+<script src="https://unpkg.com/nlweb-js-client/dist/nlweb-js-client.min.js"></script>
+
+<!-- Specific version -->
+<link rel="stylesheet" href="https://unpkg.com/nlweb-js-client@1.0.0/dist/css/chat-interface.css">
+<script src="https://unpkg.com/nlweb-js-client@1.0.0/dist/nlweb-js-client.min.js"></script>
+```
+
+You can also upload the contents of the `dist` directory to a CDN of your choice. Make sure to include both the JavaScript files and the CSS files.
+
+Other CDN options include:
 - AWS S3 + CloudFront
 - Cloudflare
 - jsDelivr
-- unpkg (automatically available if you publish to npm)
 
 ## Configuration
 
