@@ -38,33 +38,33 @@
 
     <!-- Load the bundled and minified library -->
     <!-- For production use, you can replace this with a CDN URL -->
-    <script src="dist/nlweb-js-client.min.js"></script>
+    <script src="./dist/nlweb-js-client.min.js"></script>
 
     <!-- Initialize the chat interface -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // The library is available as NLWebJsClient (defined in rollup.config.js)
             // You can access the findChatInterface function directly
-            const chat = NLWebJsClient();
-            
+            const chat = NLWebJsClient.findChatInterface();
+
             // Set up event listeners
             const searchInput = document.getElementById('ai-search-input');
             const searchButton = document.getElementById('ai-search-button');
             const closeIcon = document.getElementById('close-icon');
-            
+
             function handleSearch() {
                 const query = searchInput.value.trim();
                 if (!query) return;
-                
+
                 document.getElementById('chat-container').style.display = 'block';
                 searchInput.value = '';
                 chat.sendMessage(query);
             }
-            
+
             if (searchButton) {
                 searchButton.addEventListener('click', handleSearch);
             }
-            
+
             if (searchInput) {
                 searchInput.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
@@ -72,7 +72,7 @@
                     }
                 });
             }
-            
+
             if (closeIcon) {
                 closeIcon.addEventListener('click', () => {
                     const chatContainer = document.getElementById('chat-container');
