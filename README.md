@@ -68,10 +68,10 @@ The simplest way to use the library is to include the bundled version:
 
 ```html
 <!-- Include the CSS -->
-<link rel="stylesheet" href="dist/css/chat-interface.css">
+<link rel="stylesheet" href="./dist/css/chat-interface.css">
 
 <!-- Include the JS -->
-<script src="dist/nlweb-js-client.min.js"></script>
+<script src="./dist/nlweb-js-client.min.js"></script>
 
 <script>
   // The library is available as NLWebJsClient
@@ -102,7 +102,7 @@ import { ChatInterface, findChatInterface } from 'nlweb-js-client';
 const chat = findChatInterface(
   '', // site (optional)
   'nlwebsearch', // display mode
-  'generate', // generate mode
+  'generate', // generate mode. Use `list` for just listing the results
   'http://your-api-endpoint/ask' // API endpoint
 );
 
@@ -159,85 +159,6 @@ This library can be published to npm, making it available for installation via n
 1. You need an npm account. If you don't have one, create it at [npmjs.com](https://www.npmjs.com/signup)
 2. You need to be logged in to npm in your terminal: `npm login`
 3. You need to have appropriate access rights to the npm package
-
-### Publishing Process
-
-#### Automated Publishing (Recommended)
-
-The repository includes GitHub Actions workflows to automate the publishing process:
-
-**Release Workflow** (`.github/workflows/release.yml`):
-
-This workflow is triggered automatically when the version in package.json is changed on the main branch:
-
-- When you update the version in package.json on the main branch, the workflow will:
-  - Check if the version already exists (and stop if it does)
-  - Build the package
-  - Create a git tag for the version
-  - Publish the package to npm
-  - Create a GitHub release
-
-**Prerelease Workflow** (`.github/workflows/prerelease.yml`):
-
-This workflow is triggered automatically when package.json is modified on any branch except main:
-
-- When you modify package.json on any branch other than main, the workflow will:
-  - Build the package
-  - Generate a prerelease version using the branch name and timestamp
-  - Publish the prerelease to npm with the "next" tag
-  - Create a Git tag for the prerelease version
-  - Create a GitHub release marked as a prerelease
-
-To update the version in package.json, you can:
-```bash
-# For patch version (1.0.0 -> 1.0.1)
-npm version patch
-
-# For minor version (1.0.0 -> 1.1.0)
-npm version minor
-
-# For major version (1.0.0 -> 2.0.0)
-npm version major
-
-# Then push the changes to trigger the workflow
-git push
-```
-
-#### Manual Publishing
-
-If you prefer to publish manually:
-
-```bash
-# Make sure you're logged in to npm
-npm login
-
-# Build the package
-npm run build
-
-# Publish to npm
-npm publish
-```
-
-## Uploading to a CDN
-
-After publishing to npm, the package is automatically available via unpkg:
-
-```html
-<!-- Latest version -->
-<link rel="stylesheet" href="https://unpkg.com/nlweb-js-client/dist/css/chat-interface.css">
-<script src="https://unpkg.com/nlweb-js-client/dist/nlweb-js-client.min.js"></script>
-
-<!-- Specific version -->
-<link rel="stylesheet" href="https://unpkg.com/nlweb-js-client@1.0.0/dist/css/chat-interface.css">
-<script src="https://unpkg.com/nlweb-js-client@1.0.0/dist/nlweb-js-client.min.js"></script>
-```
-
-You can also upload the contents of the `dist` directory to a CDN of your choice. Make sure to include both the JavaScript files and the CSS files.
-
-Other CDN options include:
-- AWS S3 + CloudFront
-- Cloudflare
-- jsDelivr
 
 ## Configuration
 
@@ -389,4 +310,4 @@ const options = {
 const chat = findChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-endpoint/ask', options);
 ```
 
-For more advanced configuration options and internal architecture details, refer to the documentation in the `js/README.md` file.
+For more information about the internal architecture and code organization, refer to the documentation in the `js/README.md` file.
