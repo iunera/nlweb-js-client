@@ -1,0 +1,81 @@
+name: Release Workflow
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'package.json'
+
+jobs:
+  check-version-change:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+      changed: ${{ steps.check-version.outputs.changed }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get current version
+        id: get-version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+
+      - name: Check if version changed
+        id: check-version
+        run: |
+          git fetch --tags
+          # Check if tag already exists for this version
+          if git tag -l "v${{ steps.get-version.outputs.version }}" | grep -q .; then
+            echo "Version v${{ steps.get-version.outputs.version }} already exists as a tag"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "Version v${{ steps.get-version.outputs.version }} is new"
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+  release:
+    needs: check-version-change
+    if: needs.check-version-change.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Create Git tag
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a "v${{ needs.check-version-change.outputs.version }}" -m "Release v${{ needs.check-version-change.outputs.version }}"
+          git push origin "v${{ needs.check-version-change.outputs.version }}"
+
+      - name: Publish to NPM
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ needs.check-version-change.outputs.version }}
+          name: Release v${{ needs.check-version-change.outputs.version }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

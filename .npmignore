@@ -1,0 +1,27 @@
+# Development files
+.github/
+__tests__/
+docs/
+example*.html
+rollup.config.js
+
+# Source files (since we're publishing the built files)
+js/
+css/
+
+# Editor and OS files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.*

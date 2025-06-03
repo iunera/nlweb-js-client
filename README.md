@@ -25,13 +25,13 @@ You can include the library directly from a CDN:
 
 ```html
 <!-- Include the CSS -->
-<link rel="stylesheet" href="https://cdn.example.com/nlweb-js-client/dist/css/chat-interface.css">
+<link rel="stylesheet" href="https://unpkg.com/nlweb-js-client/dist/css/chat-interface.css">
 
 <!-- Include the JS -->
-<script src="https://cdn.example.com/nlweb-js-client/dist/nlweb-js-client.min.js"></script>
+<script src="https://unpkg.com/nlweb-js-client/dist/nlweb-js-client.min.js"></script>
 ```
 
-Replace `https://cdn.example.com/nlweb-js-client/` with your actual CDN URL.
+You can also use a specific version by adding the version number to the URL (e.g., `https://unpkg.com/nlweb-js-client@1.0.0/...`).
 
 ### Direct Download
 
@@ -68,10 +68,10 @@ The simplest way to use the library is to include the bundled version:
 
 ```html
 <!-- Include the CSS -->
-<link rel="stylesheet" href="dist/css/chat-interface.css">
+<link rel="stylesheet" href="./dist/css/chat-interface.css">
 
 <!-- Include the JS -->
-<script src="dist/nlweb-js-client.min.js"></script>
+<script src="./dist/nlweb-js-client.min.js"></script>
 
 <script>
   // The library is available as NLWebJsClient
@@ -89,7 +89,7 @@ The simplest way to use the library is to include the bundled version:
 </script>
 ```
 
-See `example-bundled.html` for a complete example.
+See [example-bundled.html](example-bundled.html) for a complete example.
 
 ### Using as an ES Module
 
@@ -102,7 +102,7 @@ import { ChatInterface, findChatInterface } from 'nlweb-js-client';
 const chat = findChatInterface(
   '', // site (optional)
   'nlwebsearch', // display mode
-  'generate', // generate mode
+  'generate', // generate mode. Use `list` for just listing the results
   'http://your-api-endpoint/ask' // API endpoint
 );
 
@@ -150,15 +150,15 @@ The build process will create the following files in the `dist` directory:
 - `nlweb-js-client.esm.js` - ES module build
 - CSS files in the `dist/css` directory
 
-## Uploading to a CDN
+## Publishing to npm
 
-After building the library, you can upload the contents of the `dist` directory to a CDN of your choice. Make sure to include both the JavaScript files and the CSS files.
+This library can be published to npm, making it available for installation via npm/yarn and automatically accessible via the unpkg CDN.
 
-Common CDN options include:
-- AWS S3 + CloudFront
-- Cloudflare
-- jsDelivr
-- unpkg (automatically available if you publish to npm)
+### Prerequisites for Publishing
+
+1. You need an npm account. If you don't have one, create it at [npmjs.com](https://www.npmjs.com/signup)
+2. You need to be logged in to npm in your terminal: `npm login`
+3. You need to have appropriate access rights to the npm package
 
 ## Configuration
 
@@ -310,4 +310,33 @@ const options = {
 const chat = findChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-endpoint/ask', options);
 ```
 
-For more advanced configuration options and internal architecture details, refer to the documentation in the `js/README.md` file.
+For more information about the internal architecture and code organization, refer to the documentation in the `js/README.md` file.
+
+## Contributing
+
+Contributions to NLWeb JS Client are welcome! Here's how you can contribute:
+
+1. **Fork the repository**: Create your own fork of the project
+2. **Create a branch**: Make your changes in a new branch
+3. **Submit a pull request**: Open a PR from your branch to the main repository
+
+### Development Guidelines
+
+- Follow the existing code style and conventions
+- Write clear, commented code
+- Test your changes thoroughly
+- Update documentation as needed
+
+### Reporting Issues
+
+If you find a bug or have a feature request, please open an issue on the GitHub repository. Include as much detail as possible:
+
+- A clear description of the issue or feature
+- Steps to reproduce (for bugs)
+- Expected vs. actual behavior
+- Screenshots if applicable
+- Environment details (browser, OS, etc.)
+
+## License
+
+NLWeb JS Client is licensed under the [MIT License](LICENSE). See the LICENSE file for more details.

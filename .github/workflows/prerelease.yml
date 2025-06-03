@@ -1,0 +1,46 @@
+name: Prerelease Workflow
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+
+jobs:
+  prerelease:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get current version
+        id: get-version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Generate prerelease version
+        id: prerelease-version
+        run: |
+          BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | sed 's/[^a-zA-Z0-9]/-/g')
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          PRERELEASE_VERSION="${{ steps.get-version.outputs.version }}-${BRANCH_NAME}.${TIMESTAMP}"
+          echo "prerelease_version=${PRERELEASE_VERSION}" >> $GITHUB_OUTPUT
+          # Update package.json with prerelease version
+          npm version ${PRERELEASE_VERSION} --no-git-tag-version
+
+      - name: Publish prerelease to NPM
+        run: npm publish --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
