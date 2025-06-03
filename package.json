@@ -15,9 +15,24 @@
   },
   "license": "OCTL",
   "author": "contact@iunera.com",
-  "type": "commonjs",
-  "main": "index.js",
+  "type": "module",
+  "main": "dist/nlweb-js-client.js",
+  "module": "dist/nlweb-js-client.esm.js",
+  "browser": "dist/nlweb-js-client.min.js",
+  "files": [
+    "dist",
+    "css"
+  ],
   "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.9.1",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-css-only": "^4.5.2"
   }
 }

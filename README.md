@@ -1,69 +1,64 @@
-# Chat Interface Embedding Guide
+# NLWeb JS Client
 
-This document explains how to embed the chat interface script directly in your HTML and configure the API endpoint.
+A streaming chat interface client library for embedding AI-powered chat functionality in web applications.
 
-## Embedding the Script
+## Installation
 
-The chat interface script can be embedded directly in your HTML file, allowing you to configure the API endpoint without modifying the JavaScript files.
+### NPM
 
-### Basic Setup
+```bash
+npm install nlweb-js-client
+```
 
-1. Include the required CSS files:
-   ```html
-   <link rel="stylesheet" href="styles.css">
-   <link rel="stylesheet" href="css/chat-interface.css">
-   ```
+### CDN
 
-2. Configure the API endpoint:
-   ```html
-   <script>
-     // Configure the API endpoint here
-     window.chatApiEndpoint = "http://your-api-endpoint/ask";
-   </script>
-   ```
+You can include the library directly from a CDN:
 
-3. Embed the chat interface script:
-   ```html
-   <script type="module">
-     import ChatInterface from './js/core/ChatInterface.js';
+```html
+<!-- Include the CSS -->
+<link rel="stylesheet" href="https://cdn.example.com/nlweb-js-client/dist/css/chat-interface.css">
 
-     // Make ChatInterface available globally
-     window.ChatInterface = ChatInterface;
+<!-- Include the JS -->
+<script src="https://cdn.example.com/nlweb-js-client/dist/nlweb-js-client.min.js"></script>
+```
 
-     // Single global chat interface instance
-     let chatInterface = null;
+Replace `https://cdn.example.com/nlweb-js-client/` with your actual CDN URL.
 
-     /**
-      * Finds or creates the chat interface
-      * @param {string} site - The site to search
-      * @param {string} display_mode - The display mode (dropdown or full)
-      * @param {string} generate_mode - The generate mode (list, summarize, generate)
-      * @param {string} apiEndpoint - The API endpoint for the chat
-      * @returns {ChatInterface} The chat interface instance
-      */
-     function findChatInterface(site='', display_mode='nlwebsearch', generate_mode='generate', apiEndpoint=null) {
-       // Use the configured API endpoint if not provided
-       if (!apiEndpoint) {
-         apiEndpoint = window.chatApiEndpoint || '/ask';
-       }
-       
-       if (chatInterface) {
-         return chatInterface;
-       }
-       chatInterface = new ChatInterface(site, display_mode, generate_mode, apiEndpoint);
-       return chatInterface;
-     }
+## Usage
 
-     // Make findChatInterface available globally
-     window.findChatInterface = findChatInterface;
+### Using the Bundled Version
 
-     // Initialize the chat interface when the DOM is loaded
-     document.addEventListener('DOMContentLoaded', () => {
-       // Your initialization code here
-       // ...
-     });
-   </script>
-   ```
+The simplest way to use the library is to include the bundled version:
+
+```html
+<!-- Include the CSS -->
+<link rel="stylesheet" href="dist/css/chat-interface.css">
+
+<!-- Include the JS -->
+<script src="dist/nlweb-js-client.min.js"></script>
+
+<script>
+  // The library is available as NLWebJsClient
+  document.addEventListener('DOMContentLoaded', () => {
+    const chat = NLWebJsClient();
+    // Use the chat interface...
+  });
+</script>
+```
+
+See `example-bundled.html` for a complete example.
+
+### Using as an ES Module
+
+```javascript
+import { ChatInterface, findChatInterface } from 'nlweb-js-client';
+
+// Create a new chat interface
+const chat = findChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-endpoint/ask');
+
+// Or create it directly
+const chatInterface = new ChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-endpoint/ask');
+```
 
 ### HTML Structure
 
@@ -83,6 +78,43 @@ The chat interface requires the following HTML structure:
 </div>
 ```
 
+## Building the Library
+
+### Prerequisites
+
+- Node.js (v14 or later)
+- npm (v6 or later)
+
+### Build Commands
+
+```bash
+# Install dependencies
+npm install
+
+# Build the library
+npm run build
+
+# Development mode with watch
+npm run dev
+```
+
+The build process will create the following files in the `dist` directory:
+
+- `nlweb-js-client.js` - UMD build (unminified)
+- `nlweb-js-client.min.js` - UMD build (minified)
+- `nlweb-js-client.esm.js` - ES module build
+- CSS files in the `dist/css` directory
+
+## Uploading to a CDN
+
+After building the library, you can upload the contents of the `dist` directory to a CDN of your choice. Make sure to include both the JavaScript files and the CSS files.
+
+Common CDN options include:
+- AWS S3 + CloudFront
+- Cloudflare
+- jsDelivr
+- unpkg (automatically available if you publish to npm)
+
 ## Configuring the API Endpoint
 
 The API endpoint can be configured in two ways:
@@ -99,9 +131,9 @@ The API endpoint can be configured in two ways:
    const chat = findChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-endpoint/ask');
    ```
 
-## Example
+## Legacy Usage (Direct Embedding)
 
-See `index.html` for a complete example of embedding the chat interface script and configuring the API endpoint.
+For legacy usage or development purposes, you can still embed the chat interface script directly in your HTML file. See `example.html` for a complete example.
 
 ## Advanced Configuration
 
