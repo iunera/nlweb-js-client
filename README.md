@@ -25,13 +25,13 @@ You can include the library directly from a CDN:
 
 ```html
 <!-- Include the CSS -->
-<link rel="stylesheet" href="https://cdn.example.com/nlweb-js-client/dist/css/chat-interface.css">
+<link rel="stylesheet" href="https://unpkg.com/nlweb-js-client/dist/css/chat-interface.css">
 
 <!-- Include the JS -->
-<script src="https://cdn.example.com/nlweb-js-client/dist/nlweb-js-client.min.js"></script>
+<script src="https://unpkg.com/nlweb-js-client/dist/nlweb-js-client.min.js"></script>
 ```
 
-Replace `https://cdn.example.com/nlweb-js-client/` with your actual CDN URL.
+You can also use a specific version by adding the version number to the URL (e.g., `https://unpkg.com/nlweb-js-client@1.0.0/...`).
 
 ### Direct Download
 
