@@ -1,15 +1,24 @@
-# NLWeb JS Client
+# NLWeb JS Client: AI-Powered Chat Interface for Web Applications
 
-A streaming chat interface client library for embedding AI-powered chat functionality in web applications. This library provides an easy way to add interactive, AI-powered chat capabilities to your website or web application.
+[![npm version](https://img.shields.io/npm/v/nlweb-js-client.svg)](https://www.npmjs.com/package/nlweb-js-client)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Features
+## Overview
 
-- Real-time streaming responses
-- Customizable UI components
-- Support for multiple integration methods (bundled, ES modules)
-- Configurable API endpoints
-- Responsive design that works on desktop and mobile
-- Simple HTML structure for easy integration
+NLWeb JS Client is a powerful, lightweight JavaScript library that enables developers to easily integrate AI-powered chat functionality into websites and web applications. This streaming chat interface client provides real-time, interactive conversational experiences for users through a customizable UI component.
+
+Developed by [iunera](https://www.iunera.com), this library builds upon the JavaScript example implementation from [Microsoft NLWeb](https://github.com/microsoft/NLWeb). It offers a streamlined solution for connecting web applications to NLWeb servers, creating engaging AI chatbot experiences with minimal setup.
+
+For a comprehensive guide on implementing NLWeb in production environments, read [iunera's detailed blog post on end-to-end chat integration with NLWeb](https://www.iunera.com/kraken/machine-learning-ai/nlweb-enables-ai-powered-websites/).
+
+## Key Features
+
+- **Real-time Streaming Responses**: Deliver dynamic, word-by-word AI responses for a natural conversational feel
+- **Flexible Integration Options**: Multiple implementation methods including NPM, CDN, and direct download
+- **Customizable UI Components**: Easily adapt the chat interface to match your website's design
+- **Responsive Design**: Works seamlessly across desktop and mobile devices
+- **Configurable API Endpoints**: Connect to any NLWeb-compatible backend
+- **Simple HTML Structure**: Straightforward integration with minimal markup requirements
 
 ## Installation
 
@@ -21,7 +30,7 @@ npm install nlweb-js-client
 
 ### CDN
 
-You can include the library directly from a CDN:
+Include the library directly from a CDN for quick implementation:
 
 ```html
 <!-- Include the CSS -->
@@ -31,15 +40,15 @@ You can include the library directly from a CDN:
 <script src="https://unpkg.com/nlweb-js-client/dist/nlweb-js-client.min.js"></script>
 ```
 
-You can also use a specific version by adding the version number to the URL (e.g., `https://unpkg.com/nlweb-js-client@1.0.0/...`).
+You can also use a specific version by adding the version number to the URL (e.g., `https://unpkg.com/nlweb-js-client@1.0.2/...`).
 
 ### Direct Download
 
-You can also download the latest release from the [GitHub repository](https://github.com/iunera/nlweb-js-client/releases) and include the files directly in your project.
+Download the latest release from the [GitHub repository](https://github.com/iunera/nlweb-js-client/releases) and include the files directly in your project.
 
-## Usage
+## Quick Start Guide
 
-### HTML Structure
+### Basic HTML Structure
 
 The chat interface requires the following HTML structure:
 
@@ -62,9 +71,11 @@ The chat interface requires the following HTML structure:
 </div>
 ```
 
-### Using the Bundled Version
+### Implementation Methods
 
-The simplest way to use the library is to include the bundled version:
+#### Using the Bundled Version
+
+The simplest way to implement the chatbot interface:
 
 ```html
 <!-- Include the CSS -->
@@ -72,9 +83,14 @@ The simplest way to use the library is to include the bundled version:
 
 <!-- Include the JS -->
 <script src="./dist/nlweb-js-client.min.js"></script>
+<!-- or -->
+<script src="https://unpkg.com/nlweb-js-client/dist/nlweb-js-client.min.js"></script>
 
 <script>
-  // The library is available as NLWebJsClient
+  // Configure the API endpoint
+  window.chatApiEndpoint = "http://your-api-endpoint/ask";
+
+  // Initialize the chat interface
   document.addEventListener('DOMContentLoaded', () => {
     const chat = NLWebJsClient();
 
@@ -89,11 +105,11 @@ The simplest way to use the library is to include the bundled version:
 </script>
 ```
 
-See [example-bundled.html](example-bundled.html) for a complete example.
+See [example-bundled.html](examples/example-bundled.html) for a complete example.
 
-### Using as an ES Module
+#### Using as an ES Module
 
-For more control and better integration with modern JavaScript applications, you can use the library as an ES module:
+For modern JavaScript applications and more control:
 
 ```javascript
 import { ChatInterface, findChatInterface } from 'nlweb-js-client';
@@ -123,7 +139,66 @@ chatInterface.on('message', (message) => {
 });
 ```
 
-## Building the Library
+## Configuration Options
+
+### API Endpoint Configuration
+
+Configure the backend API endpoint in two ways:
+
+1. **Via HTML**: Set `window.chatApiEndpoint` before the chat interface script:
+   ```html
+   <script>
+     window.chatApiEndpoint = "http://your-api-endpoint/ask";
+   </script>
+   ```
+
+2. **Via JavaScript**: Pass the API endpoint directly to the `findChatInterface` function:
+   ```javascript
+   const chat = findChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-endpoint/ask');
+   ```
+
+### Display Modes
+
+Choose from different display modes to suit your application:
+
+- `nlwebsearch`: Standard chat interface with search functionality
+- `chat`: Simple chat interface without search functionality
+- `embed`: Embedded chat interface for integration into existing UI
+
+Example:
+```javascript
+const chat = findChatInterface('', 'chat', 'generate', 'http://your-api-endpoint/ask');
+```
+
+### Response Generation Modes
+
+Control how AI responses are delivered:
+
+- `generate`: Standard response generation
+- `stream`: Streaming response generation (responses appear word by word)
+
+Example:
+```javascript
+const chat = findChatInterface('', 'nlwebsearch', 'stream', 'http://your-api-endpoint/ask');
+```
+
+### Advanced Configuration
+
+Further customize the chat interface with additional options:
+
+```javascript
+const options = {
+  debug: true, // Enable debug logging
+  autoOpen: false, // Don't open the chat interface automatically
+  placeholder: 'Type your question...', // Custom placeholder for the input field
+  theme: 'dark', // Use dark theme (default is 'light')
+  maxMessages: 50, // Maximum number of messages to keep in history
+};
+
+const chat = findChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-endpoint/ask', options);
+```
+
+## Development and Building
 
 ### Prerequisites
 
@@ -143,65 +218,22 @@ npm run build
 npm run dev
 ```
 
-The build process will create the following files in the `dist` directory:
+The build process creates the following files in the `dist` directory:
 
 - `nlweb-js-client.js` - UMD build (unminified)
 - `nlweb-js-client.min.js` - UMD build (minified)
 - `nlweb-js-client.esm.js` - ES module build
 - CSS files in the `dist/css` directory
 
-## Publishing to npm
+### Publishing to npm
 
 This library can be published to npm, making it available for installation via npm/yarn and automatically accessible via the unpkg CDN.
 
-### Prerequisites for Publishing
+#### Prerequisites for Publishing
 
 1. You need an npm account. If you don't have one, create it at [npmjs.com](https://www.npmjs.com/signup)
 2. You need to be logged in to npm in your terminal: `npm login`
 3. You need to have appropriate access rights to the npm package
-
-## Configuration
-
-### API Endpoint
-
-The API endpoint can be configured in two ways:
-
-1. **Via HTML**: Set `window.chatApiEndpoint` before the chat interface script:
-   ```html
-   <script>
-     window.chatApiEndpoint = "http://your-api-endpoint/ask";
-   </script>
-   ```
-
-2. **Via JavaScript**: Pass the API endpoint directly to the `findChatInterface` function:
-   ```javascript
-   const chat = findChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-endpoint/ask');
-   ```
-
-### Display Modes
-
-The chat interface supports different display modes:
-
-- `nlwebsearch`: Standard chat interface with search functionality
-- `chat`: Simple chat interface without search functionality
-- `embed`: Embedded chat interface for integration into existing UI
-
-Example:
-```javascript
-const chat = findChatInterface('', 'chat', 'generate', 'http://your-api-endpoint/ask');
-```
-
-### Generate Modes
-
-The generate mode determines how responses are generated:
-
-- `generate`: Standard response generation
-- `stream`: Streaming response generation (responses appear word by word)
-
-Example:
-```javascript
-const chat = findChatInterface('', 'nlwebsearch', 'stream', 'http://your-api-endpoint/ask');
-```
 
 ## API Documentation
 
@@ -219,8 +251,6 @@ The chat interface provides the following methods:
 | `hide()` | Hides the chat interface | None |
 
 ### Events
-
-The chat interface emits the following events:
 
 | Event | Description | Callback Parameters |
 |-------|-------------|---------------------|
@@ -242,17 +272,6 @@ chat.on('error', (error) => {
   console.error('An error occurred:', error);
 });
 ```
-
-## Legacy Usage (Direct Embedding)
-
-For legacy usage or development purposes, you can still embed the chat interface script directly in your HTML file:
-
-```html
-<link rel="stylesheet" href="css/chat-interface.css">
-<script type="module" src="js/init/ChatInterfaceInit.js"></script>
-```
-
-See `example.html` for a complete example.
 
 ## Browser Compatibility
 
@@ -294,23 +313,16 @@ const chat = findChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-e
 
 This will output detailed logs to the browser console.
 
-## Advanced Configuration
+## Legacy Integration
 
-The chat interface can be further customized with additional options:
+For legacy usage or development purposes, you can still embed the chat interface script directly in your HTML file:
 
-```javascript
-const options = {
-  debug: true, // Enable debug logging
-  autoOpen: false, // Don't open the chat interface automatically
-  placeholder: 'Type your question...', // Custom placeholder for the input field
-  theme: 'dark', // Use dark theme (default is 'light')
-  maxMessages: 50, // Maximum number of messages to keep in history
-};
-
-const chat = findChatInterface('', 'nlwebsearch', 'generate', 'http://your-api-endpoint/ask', options);
+```html
+<link rel="stylesheet" href="css/chat-interface.css">
+<script type="module" src="js/init/ChatInterfaceInit.js"></script>
 ```
 
-For more information about the internal architecture and code organization, refer to the documentation in the `js/README.md` file.
+See [example.html](examples/example-bundled.html) for a complete example.
 
 ## Contributing
 
@@ -340,3 +352,19 @@ If you find a bug or have a feature request, please open an issue on the GitHub 
 ## License
 
 NLWeb JS Client is licensed under the [MIT License](LICENSE). See the LICENSE file for more details.
+
+## About
+
+NLWeb JS Client is maintained by [iunera](https://www.iunera.com), a company specializing in AI-powered solutions for businesses. This library is part of our commitment to making advanced AI technology accessible to web developers.
+
+Built on Microsoft's NLWeb foundation, this client library enables seamless integration of conversational AI capabilities into any website or web application. For more information about implementing NLWeb in production environments, visit our [detailed guide](https://www.iunera.com/kraken/machine-learning-ai/nlweb-enables-ai-powered-websites/).
+
+## Related Projects
+
+Explore other projects from iunera that complement NLWeb JS Client:
+
+- [NLWeb](https://github.com/iunera/NLWeb) - iunera's implementation of Microsoft's NLWeb framework for AI-powered websites
+- [NLWeb Docker Image](https://hub.docker.com/r/iunera/nlweb) - Docker image for running NLWeb server
+- [nlweb-js-client](https://github.com/iunera/nlweb-js-client) - This library, a JavaScript client for NLWeb integration
+- [json-ld-markdown](https://github.com/iunera/json-ld-markdown) - A tool for embedding JSON-LD structured data in Markdown files
+- [jsonld-schemaorg-javatypes](https://github.com/iunera/jsonld-schemaorg-javatypes) - Java types for Schema.org JSON-LD implementation
